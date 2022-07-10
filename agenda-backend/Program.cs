@@ -5,8 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 ConnectionStrings.MySQL = builder.Configuration.GetConnectionString("MySQL");
 // Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddCors();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null); ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<myagendaContext, myagendaContext>();
@@ -21,6 +21,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(options =>
+{
+    options.WithOrigins("http://localhost:3000");
+    options.AllowAnyMethod();
+    options.AllowAnyHeader();
+});
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
